@@ -1,6 +1,12 @@
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 import hug
 import torch
 import fairseq
+
+
 
 # List available models
 torch.hub.list('pytorch/fairseq')  # [..., 'transformer.wmt16.en-de', ... ]
@@ -12,7 +18,7 @@ en2de.eval()  # disable dropout
 # The underlying model is available under the *models* attribute
 assert isinstance(en2de.models[0], fairseq.models.transformer.TransformerModel)
 
-@hug.get(examples='txt="Hello World"')
-@hug.local()
+
+@hug.get('/translate/{msg}')
 def translate(msg: hug.types.text):
     return {'msg':en2de.translate(msg)}
